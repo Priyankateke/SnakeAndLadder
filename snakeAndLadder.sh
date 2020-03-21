@@ -11,13 +11,18 @@ WINNING_POSITION=100
 
 #variables
 playerPosition=0
+diceRoll=0
+
+#dictionary
+declare -A gameRecords
 
 #Function to set playerPosition according to playing Options like NO_Play or Snake or Ladder
 function setPlayerMoves()
 {
 	dieValue=$(( RANDOM % 6 + 1 ))
 	playingOptions=$(( RANDOM % 3 ))
-	
+	((diceRoll++))
+
 	#Move player Position according to playingOptions
 	case $playingOptions in
 		$NO_PLAY)
@@ -31,6 +36,7 @@ function setPlayerMoves()
 			;;
 	esac
 	resetingWrongPosition
+	gameRecords[DiceRoll:$diceRoll]=$playerPosition
 }
 
 function playUntilWin()
