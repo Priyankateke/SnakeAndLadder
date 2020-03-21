@@ -6,6 +6,8 @@ echo "Welcome To Snake And Ladder"
 NO_PLAY=0
 LADDER=1
 SNAKE=2
+STARTING_POSITION=0
+WINNING_POSITION=100
 
 #variables
 playerPosition=0
@@ -28,7 +30,26 @@ function setPlayerMoves()
 			playerPosition=$(( playerPosition - dieValue ))
 			;;
 	esac
+	resetingWrongPosition
+	echo "Player Position : "$playerPosition
+}
+
+function playUntilWin()
+{
+	while [ $playerPosition -le $WINNING_POSITION ]
+	do
+		setPlayerMoves
+	done
+}
+
+function resetingWrongPosition()
+{
+	if [ $playerPosition -lt $STARTING_POSITION ]
+	then
+		playerPosition=$STARTING_POSITION
+	fi
+
 }
 
 #Start game
-setPlayerMoves
+playUntilWin
