@@ -31,24 +31,24 @@ function setPlayerMoves()
 			;;
 	esac
 	resetingWrongPosition
-	echo "Player Position : "$playerPosition
 }
 
 function playUntilWin()
 {
-	while [ $playerPosition -le $WINNING_POSITION ]
+	while [ $playerPosition -ne $WINNING_POSITION ]
 	do
 		setPlayerMoves
 	done
 }
 
+#Ensures playerPostion is between 0 to 100
 function resetingWrongPosition()
 {
-	if [ $playerPosition -lt $STARTING_POSITION ]
-	then
+	if [ $playerPosition -lt $STARTING_POSITION ]; then
 		playerPosition=$STARTING_POSITION
+	elif [ $playerPosition -gt $WINNING_POSITION ]; then
+		playerPosition=$((playerPosition - dieValue))
 	fi
-
 }
 
 #Start game
