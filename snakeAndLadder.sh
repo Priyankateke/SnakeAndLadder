@@ -10,8 +10,9 @@ STARTING_POSITION=0
 WINNING_POSITION=100
 
 #variables
-playerPosition=0
+playerPosition=$STARTING_POSITION
 diceRoll=0
+player=2
 
 #dictionary
 declare -A gameRecords
@@ -36,15 +37,17 @@ function setPlayerMoves()
 			;;
 	esac
 	resetingWrongPosition
-	gameRecords[DiceRoll:$diceRoll]=$playerPosition
+	gameRecords[player:$player]=$playerPosition,$diceRoll
 }
 
 function playUntilWin()
 {
 	while [ $playerPosition -ne $WINNING_POSITION ]
 	do
+		switchPlayer
 		setPlayerMoves
 	done
+	echo "Player: $player won "
 }
 
 #Ensures playerPostion is between 0 to 100
@@ -54,6 +57,16 @@ function resetingWrongPosition()
 		playerPosition=$STARTING_POSITION
 	elif [ $playerPosition -gt $WINNING_POSITION ]; then
 		playerPosition=$((playerPosition - dieValue))
+	fi
+}
+
+#setting players turn One bye one
+function switchPlayer()
+{
+	if [ $player -eq 1 ]; then
+		player=2
+	else
+		player=1
 	fi
 }
 
