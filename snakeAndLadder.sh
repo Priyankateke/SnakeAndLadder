@@ -32,12 +32,14 @@ function setPlayerMoves()
 			;;
 		$LADDER)
 			playerPosition=$(( playerPosition + dieValue ))
+			#Ensures playerPosition is not greater than winning position
 			if [ $playerPosition -gt $WINNING_POSITION ]; then
 				playerPosition=$((playerPosition - dieValue))
 			fi
 			;;
 		$SNAKE)
 			playerPosition=$(( playerPosition - dieValue ))
+			#Ensures playerPosition is not less than starting position
 			if [ $playerPosition -lt $STARTING_POSITION ]; then
 				playerPosition=$STARTING_POSITION
 			fi
@@ -61,14 +63,14 @@ function switchPlayer()
 	if [ $player -eq 1 ]; then
 		player=2
 		playerPosition=$playerTwoPosition
-      setPlayerMoves
-      playerTwoPosition=$playerPosition
+		setPlayerMoves
+		playerTwoPosition=$playerPosition
 	else
 		player=1
 		((diceRoll++))
 		playerPosition=$playerOnePosition
-      setPlayerMoves
-      playerOnePosition=$playerPosition
+		setPlayerMoves
+		playerOnePosition=$playerPosition
 	fi
 }
 
