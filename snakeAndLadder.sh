@@ -10,9 +10,11 @@ STARTING_POSITION=0
 WINNING_POSITION=100
 
 #variables
-playerPosition=$STARTING_POSITION
 diceRoll=0
 player=2
+playerPosition=$STARTING_POSITION
+playerOnePosition=$STARTING_POSITION
+playerTwoPosition=$STARTING_POSITION
 
 #dictionary
 declare -A gameRecords
@@ -22,7 +24,6 @@ function setPlayerMoves()
 {
 	dieValue=$(( RANDOM % 6 + 1 ))
 	playingOptions=$(( RANDOM % 3 ))
-	((diceRoll++))
 
 	#Move player Position according to playingOptions
 	case $playingOptions in
@@ -31,12 +32,17 @@ function setPlayerMoves()
 			;;
 		$LADDER)
 			playerPosition=$(( playerPosition + dieValue ))
+			if [ $playerPosition -gt $WINNING_POSITION ]; then
+				playerPosition=$((playerPosition - dieValue))
+			fi
 			;;
 		$SNAKE)
 			playerPosition=$(( playerPosition - dieValue ))
+			if [ $playerPosition -lt $STARTING_POSITION ]; then
+				playerPosition=$STARTING_POSITION
+			fi
 			;;
 	esac
-	resetingWrongPosition
 	gameRecords[player:$player]=$playerPosition,$diceRoll
 }
 
@@ -45,19 +51,8 @@ function playUntilWin()
 	while [ $playerPosition -ne $WINNING_POSITION ]
 	do
 		switchPlayer
-		setPlayerMoves
 	done
 	echo "Player: $player won "
-}
-
-#Ensures playerPostion is between 0 to 100
-function resetingWrongPosition()
-{
-	if [ $playerPosition -lt $STARTING_POSITION ]; then
-		playerPosition=$STARTING_POSITION
-	elif [ $playerPosition -gt $WINNING_POSITION ]; then
-		playerPosition=$((playerPosition - dieValue))
-	fi
 }
 
 #setting players turn One bye one
@@ -65,8 +60,15 @@ function switchPlayer()
 {
 	if [ $player -eq 1 ]; then
 		player=2
+		playerPosition=$playerTwoPosition
+      setPlayerMoves
+      playerTwoPosition=$playerPosition
 	else
 		player=1
+		((diceRoll++))
+		playerPosition=$playerOnePosition
+      setPlayerMoves
+      playerOnePosition=$playerPosition
 	fi
 }
 
